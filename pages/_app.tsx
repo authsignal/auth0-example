@@ -5,28 +5,33 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import "../styles/globals.css";
 
+// Authsignal
+const baseUrl = process.env.NEXT_PUBLIC_AUTHSIGNAL_CLIENT_URL!;
+const tenantId = process.env.NEXT_PUBLIC_AUTHSIGNAL_TENANT_ID!;
+
+// Auth0
+const domain = process.env.NEXT_PUBLIC_AUTH0_DOMAIN!;
+const clientId = process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID!;
+const audience = process.env.NEXT_PUBLIC_AUTH0_AUDIENCE!;
+const redirectUrl = process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URL!;
+
 function App({ Component, pageProps }: AppProps) {
   const [authsignal, setAuthsignal] = useState<Authsignal | undefined>();
 
   useEffect(() => {
-    const client = new Authsignal({
-      baseUrl: "https://dev-challenge.authsignal.com/v1",
-      tenantId: "90fd262e-f12e-4f08-a92c-ecd94774e692",
-    });
-
-    setAuthsignal(client);
+    setAuthsignal(new Authsignal({ baseUrl, tenantId }));
   }, []);
 
   return authsignal ? (
     <Auth0Provider
-      domain="dev-xvna46b6.us.auth0.com"
-      clientId="8w9zcSW9nW8oH06JvasY7Yhd9TdQ46jO"
+      domain={domain}
+      clientId={clientId}
       onRedirectCallback={(appState) => {
         Router.replace(appState?.returnTo || "/");
       }}
       authorizationParams={{
-        audience: "https://test-api.com",
-        redirect_uri: "http://localhost:3000",
+        audience,
+        redirect_uri: redirectUrl,
         device_id: authsignal.anonymousId,
       }}
     >
