@@ -11,7 +11,7 @@ function HomePage() {
         <div>Signed in as: {user?.name}</div>
         <button
           onClick={() =>
-            logout({ logoutParams: { returnTo: "http://localhost:3000" } })
+            logout({ logoutParams: { returnTo: process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URL } })
           }
         >
           Sign out
